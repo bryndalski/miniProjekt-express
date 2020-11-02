@@ -1,0 +1,81 @@
+body{
+    padding:0;
+    margin:0;
+}
+.MainNav{
+    background-color: rgb(78, 78, 194);
+    display: flex;
+    flex-direction: row;
+    height:60px;
+}
+
+.MainNav a{
+    color: white;
+    text-decoration: none;
+    line-height:60px;
+    font-size: large;
+    text-decoration: underline;
+    font-family: 'Roboto', sans-serif;
+}
+.MainNav a:hover,
+.MainNav a:active{
+    color: rgb(218, 36, 202);
+}
+
+.MainNav li{
+ 
+    text-decoration: none;
+    display: flex;
+    margin-left:50px;
+}
+.HugeText{
+    width:100vw;
+    height:200px;
+    line-height:200px;
+    font-size: 100pt;
+    font-family: 'Roboto', sans-serif;
+    font-weight:bolder;
+    color: rgb(191, 191, 212);
+    text-align: center;
+}
+.formContainer{
+    background-color: rebeccapurple;
+    width:100vw;
+    align-items: center;
+    height:400px;
+    display:flex;
+
+}
+.formContainer form{
+    display: inline-block;
+    margin: 0 auto;
+    overflow:auto;
+}
+.formContainer input[type="text"],.formContainer input[type="password"],.formContainer select{
+ display: inline-block;
+ height:30px;
+ width:300px;
+margin:10px;
+}
+.formContainer input[type="checkbox"],.formContainer input[type="radio"]{
+    width:30px;
+    height: 30px;
+}
+label{
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20pt;
+    margin-left: 10px;
+    width:30px;
+}
+button{
+    text-align: center;
+    color: gray;
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+    background-color: none;
+    border:  solid black 1px;
+    border-radius: 3px;
+    height:60px;
+    width:300px;
+}
