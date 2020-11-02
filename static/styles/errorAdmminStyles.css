@@ -1,0 +1,41 @@
+body{
+    padding:0;
+    margin:0;
+    background:linear-gradient(red,rgb(241, 46, 46));
+}
+.MainNav{
+    background-color: rgb(78, 78, 194);
+    display: flex;
+    flex-direction: row;
+    height:60px;
+}
+
+.MainNav a{
+    color: white;
+    text-decoration: none;
+    line-height:60px;
+    font-size: large;
+    text-decoration: underline;
+    font-family: 'Roboto', sans-serif;
+}
+.MainNav a:hover,
+.MainNav a:active{
+    color: rgb(218, 36, 202);
+}
+
+.MainNav li{
+ 
+    text-decoration: none;
+    display: flex;
+    margin-left:50px;
+}
+.HugeText{
+    width:100vw;
+    height: calc( 100% - 60px);
+    line-height:calc( 100% - 60px);
+    font-size: 200pt;
+    font-family: 'Roboto', sans-serif;
+    font-weight:bolder;
+    color: rgb(191, 191, 212);
+    text-align: center;
+}
