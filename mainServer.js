@@ -74,7 +74,7 @@ let logged = false
 const pageBasic = "<body style='background-color:black;width:100vw;height:100vh'><a style='color:white;margin:10px;font-size:large;' href='/sort'>Sort</a><a  style='color:white;margin:10px;font-size:large;' href='gender'>gender</a><a  style='color:white;margin:10px;font-size:large;'href='show'>Show</a>"
 sortigPossibility = true
 // routingi odpowiednich stron
-app.get("/admin", function (req, res) { // dla admina z warunkiem na cookies
+app.get("/admin", function (req, res) { // dla admina 
     if (logged)
         res.sendFile(path.join(__dirname + "/static/pages/adminLoggedPage.html"))
     else
@@ -111,7 +111,7 @@ app.post('/LoginFormula', function (req, res) {
 })
 //obsługa adminPanela
 app.get("/logOut", function (req, res) { // dla maina bez nazwy 
-    if (logged)
+    if (!logged)
         res.sendFile(path.join(__dirname + "/static/pages/errorPage.html"))
     logged = false;
     res.redirect('/')
