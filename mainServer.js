@@ -1,7 +1,7 @@
 //zmienne, stałe
 var express = require("express")
 var app = express()
-var PORT = process.env.PORT || 5500;
+var PORT = process.env.PORT || 3000;
 // routing stuff 
 var path = require("path")
 app.use(express.static('static'))
