@@ -1,16 +1,17 @@
 //zmienne, stałe
 var express = require("express")
 var app = express()
-const PORT = 5500;
+var PORT = process.env.PORT || 5500;
 // routing stuff 
 var path = require("path")
 app.use(express.static('static'))
 //form stuff
 var bodyParser = require("body-parser")
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 // let userDataArray = [] // pusta tablica
-let userDataArray = [
-    {
+let userDataArray = [{
         id: 1,
         login: 'Maciek',
         password: '123',
@@ -58,26 +59,23 @@ let userDataArray = [
         uczen: 'on',
         plec: 'm'
     }
-]   // używana do testów i sprawdzania zostawiam, może się porzydać :)
+] // używana do testów i sprawdzania zostawiam, może się porzydać :)
 //logIn Stuff
-var express = require('express')
-var cookieParser = require('cookie-parser');
-const { S_IFBLK } = require("constants");
-app.use(cookieParser())
+let logged = false
 //Admin stuff
 const pageBasic = "<body style='background-color:black;width:100vw;height:100vh'><a style='color:white;margin:10px;font-size:large;' href='/sort'>Sort</a><a  style='color:white;margin:10px;font-size:large;' href='gender'>gender</a><a  style='color:white;margin:10px;font-size:large;'href='show'>Show</a>"
 sortigPossibility = true
 // routingi odpowiednich stron
 app.get("/admin", function (req, res) { // dla admina z warunkiem na cookies
-    if (req.cookies.LogData == undefined)
-        res.sendFile(path.join(__dirname + "/static/pages/adminPage.html"))
-    else
+    if (logged)
         res.sendFile(path.join(__dirname + "/static/pages/adminLoggedPage.html"))
+    else
+        res.sendFile(path.join(__dirname + "/static/pages/adminPage.html"))
 })
 app.get("/login", function (req, res) { // dla logina
     res.sendFile(path.join(__dirname + "/static/pages/loginPage.html"))
 })
-app.get("/register", function (req, res) {  // dla rejestracji
+app.get("/register", function (req, res) { // dla rejestracji
     res.sendFile(path.join(__dirname + "/static/pages/registerPage.html"))
 })
 app.get("/main", function (req, res) { // dla maina
@@ -89,7 +87,7 @@ app.get("/", function (req, res) { // dla maina bez nazwy
 //obsługa pobierania formularzy 
 // dla formularza obsługi danych użytkownika 
 app.post("/RegisterFromula", function (req, res) {
-    if (userDataArray.findIndex(array => array.login === req.body.login) == "-1" && req.body.login != '' && req.body.password != '') {  // kontroluje brak powtórzenia loginu wymagane pole hasła i loginu nie jest puste  jeśli jakiś super user nie pochwali się jakim jest hakerem i nie usunie w konsoli input required
+    if (userDataArray.findIndex(array => array.login === req.body.login) == "-1" && req.body.login != '' && req.body.password != '') { // kontroluje brak powtórzenia loginu wymagane pole hasła i loginu nie jest puste  jeśli jakiś super user nie pochwali się jakim jest hakerem i nie usunie w konsoli input required
         userDataArray.push(req.body)
         userDataArray[userDataArray.length - 1].id = userDataArray.length
         res.send("<h1>Witaj " + req.body.login + ", Rejestracja zakończona sukcesem </h1><a href='main'>przejdź na stronę główną</a>")
@@ -100,20 +98,18 @@ app.post("/RegisterFromula", function (req, res) {
 app.post('/LoginFormula', function (req, res) {
     let searchiedindex = userDataArray.findIndex(array => array.login === req.body.login)
     if (searchiedindex != '-1' && req.body.password === userDataArray[searchiedindex].password) { // oznaczenie to oznacza że został znaleziowny w tablicy / bazie danych 
-        res
-            .cookie("LogData", req.body.login, { httpOnly: true })
-            .redirect('/admin');
+        logged = true;
+        res.redirect('/admin');
     } else {
         res.send("<h1>Dane logowania niepoprawne </h1><a href='main'>przejdź na stronę główną</a>")
     }
 })
 //obsługa adminPanela
 app.get("/logOut", function (req, res) { // dla maina bez nazwy 
-    if (req.cookies.LogData == undefined)
+    if (logged)
         res.sendFile(path.join(__dirname + "/static/pages/errorPage.html"))
-    res
-        .clearCookie("LogData")
-        .redirect('/main')
+    logged = false;
+    res.redirect('/main')
 })
 //obsługa podanych stringów na serwerze
 // funkcja tworząca pojedynczy rząd w tabeli  
@@ -136,13 +132,13 @@ function genderArrayRowMaker(tablica, i) {
 }
 // obsługa show
 app.get('/show', function (req, res) {
-    if (req.cookies.LogData != undefined) {
+    if (logged) {
         userDataArray = userDataArray.sort(function (a, b) {
             return parseFloat(a.id) - parseFloat(b.id);
         });;
         let tempPage = pageBasic + "<table style='width:80vw;height:60vh ' >"
         console.log(userDataArray)
-        for (i = 0; i < userDataArray.length; i++) {// tworzę stringa z tabelą
+        for (i = 0; i < userDataArray.length; i++) { // tworzę stringa z tabelą
             tempPage += arrayRowMaker(userDataArray, i)
         }
         tempPage += "</table></body>"
@@ -152,10 +148,10 @@ app.get('/show', function (req, res) {
 })
 //obsługa gender
 app.get('/gender', function (req, res) {
-    if (req.cookies.LogData != undefined) {
+    if (logged) {
         let tempPage = pageBasic + "<table style='margin:0 auto;width:80vw;height:30vh ' >"
         let manTable = "<table style='margin:0 auto;width:80vw;height:30vh;margin-top:10px;' >"
-        for (i = 0; i < userDataArray.length; i++) {// tworzę stringa z tabelą
+        for (i = 0; i < userDataArray.length; i++) { // tworzę stringa z tabelą
             if (userDataArray[i].plec == "m")
                 manTable += genderArrayRowMaker(userDataArray, i)
             else
@@ -168,7 +164,7 @@ app.get('/gender', function (req, res) {
 })
 //pbsługa sort jako strony i formularza 
 app.get('/sort', function (req, res) {
-    if (req.cookies.LogData != undefined) {
+    if (logged) {
         let mustliUserDate = userDataArray;
         console.log(userDataArray)
         mustliUserDate = mustliUserDate.sort(function (a, b) {
@@ -184,7 +180,7 @@ app.get('/sort', function (req, res) {
         }
         let manTable = "<table style='margin:0 auto;width:80vw;height:30vh;margin-top:10px;' >"
 
-        for (i = 0; i < userDataArray.length; i++) {// tworzę stringa z tabelą
+        for (i = 0; i < userDataArray.length; i++) { // tworzę stringa z tabelą
             if (sortigPossibility)
                 manTable += arrayRowMaker(mustliUserDate, i)
             else
@@ -197,12 +193,10 @@ app.get('/sort', function (req, res) {
         res.sendFile(path.join(__dirname + "/static/pages/errorPage.html"))
 })
 app.post('/sort', function (req, res) {
-    console.log(req.body.type)
     if (req.body.type == 'dwn')
         sortigPossibility = false
     else
         sortigPossibility = true
-    console.log(sortigPossibility)
     res.redirect("/sort")
 })
 // obsługa routingu który nie został podany zwraca stronę, z stosowną informacją ( umieszczam na końcu coś w stulu switcha i opcja default)

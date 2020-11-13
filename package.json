@@ -1,0 +1,24 @@
+{
+  "name": "stefan-miniprojekt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mainServer.js",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryndalski/Stefan-miniProjekt.git"
+  },
+  "author": "Jakub Bryndal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bryndalski/Stefan-miniProjekt/issues"
+  },
+  "homepage": "https://github.com/bryndalski/Stefan-miniProjekt#readme"
+}
