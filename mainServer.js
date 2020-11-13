@@ -13,53 +13,61 @@ app.use(bodyParser.urlencoded({
 // let userDataArray = [] // pusta tablica
 let userDataArray = [{
         id: 1,
-        login: 'Maciek',
-        password: '123',
+        login: 'Monika',
+        password: 'monika123',
         ageSelect: '17',
         uczen: 'on',
-        plec: 'm'
+        plec: 'k'
     },
     {
         id: 2,
-        login: '123',
-        password: '123',
+        login: 'Janek',
+        password: 'janek123',
         ageSelect: '16',
         uczen: 'on',
         plec: 'm'
     },
     {
         id: 3,
-        login: '12',
-        password: '22',
-        ageSelect: '3333',
+        login: 'Kasia',
+        password: 'kasia123',
+        ageSelect: '33',
         uczen: 'off',
         plec: 'k'
     },
     {
         id: 4,
-        login: 'bryndalski',
-        password: '123',
+        login: 'Ola',
+        password: 'ola123',
         ageSelect: '19',
         uczen: 'on',
         plec: 'k'
     },
     {
         id: 5,
-        login: '4124124',
-        password: '141241',
+        login: 'Adam',
+        password: 'adam123',
         ageSelect: '12',
         uczen: 'on',
-        plec: 'k'
+        plec: 'm'
     },
     {
         id: 6,
         login: 'Maciek',
-        password: '123',
+        password: 'maciek123',
         ageSelect: '17',
         uczen: 'on',
         plec: 'm'
+    },
+    {
+        id: 7,
+        login: 'Marysia',
+        password: 'marysia123',
+        ageSelect: '17',
+        uczen: 'off',
+        plec: 'k'
     }
-] // używana do testów i sprawdzania zostawiam, może się porzydać :)
+] // używana do testów i sprawdzania zostawiam, może się przydać :)
 //logIn Stuff
 let logged = false
 //Admin stuff
@@ -78,21 +86,18 @@ app.get("/login", function (req, res) { // dla logina
 app.get("/register", function (req, res) { // dla rejestracji
     res.sendFile(path.join(__dirname + "/static/pages/registerPage.html"))
 })
-app.get("/main", function (req, res) { // dla maina
-    res.sendFile(path.join(__dirname + "/static/pages/mainPage.html"))
-})
 app.get("/", function (req, res) { // dla maina bez nazwy 
     res.sendFile(path.join(__dirname + "/static/pages/mainPage.html"))
 })
 //obsługa pobierania formularzy 
 // dla formularza obsługi danych użytkownika 
 app.post("/RegisterFromula", function (req, res) {
-    if (userDataArray.findIndex(array => array.login === req.body.login) == "-1" && req.body.login != '' && req.body.password != '') { // kontroluje brak powtórzenia loginu wymagane pole hasła i loginu nie jest puste  jeśli jakiś super user nie pochwali się jakim jest hakerem i nie usunie w konsoli input required
+    if (userDataArray.findIndex(array => array.login === req.body.login) == "-1" && req.body.login != '' && req.body.password != '' && req.body.plec != undefined && req.body.ageSelect != undefined && req.body.ageSelect >= 10 && req.body.ageSelect <= 100) { // kontroluje brak powtórzenia loginu wymagane pole hasła i loginu nie jest puste  jeśli jakiś super user nie pochwali się jakim jest hakerem i nie usunie w konsoli input requXired albo nie zacznie się bawić VAlue w inpucie i ustaiwać np 124123123123 :)
         userDataArray.push(req.body)
         userDataArray[userDataArray.length - 1].id = userDataArray.length
-        res.send("<h1>Witaj " + req.body.login + ", Rejestracja zakończona sukcesem </h1><a href='main'>przejdź na stronę główną</a>")
+        res.send("<h1>Witaj " + req.body.login + ", Rejestracja zakończona sukcesem </h1><a href='/'>przejdź na stronę główną</a>")
     } else
-        res.send("<h1>Podane dane zostały wykorzystane lub podane dane były błędne</h1><a href='main'>przejdź na stronę główną</a>")
+        res.send("<h1>Podane dane zostały wykorzystane lub podane dane były błędne</h1><a href='/'>przejdź na stronę główną</a>")
 })
 //logIn formula
 app.post('/LoginFormula', function (req, res) {
@@ -101,7 +106,7 @@ app.post('/LoginFormula', function (req, res) {
         logged = true;
         res.redirect('/admin');
     } else {
-        res.send("<h1>Dane logowania niepoprawne </h1><a href='main'>przejdź na stronę główną</a>")
+        res.send("<h1>Dane logowania niepoprawne </h1><a href='/'>przejdź na stronę główną</a>")
     }
 })
 //obsługa adminPanela
@@ -109,13 +114,13 @@ app.get("/logOut", function (req, res) { // dla maina bez nazwy
     if (logged)
         res.sendFile(path.join(__dirname + "/static/pages/errorPage.html"))
     logged = false;
-    res.redirect('/main')
+    res.redirect('/')
 })
 //obsługa podanych stringów na serwerze
 // funkcja tworząca pojedynczy rząd w tabeli  
 function arrayRowMaker(tablica, i) {
     let maintainRow = ''
-    maintainRow += "<tr style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite' ><th style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite'>" + tablica[i].id + "</th><th style='background-color:rgb(36, 36, 37);color:ghostwhite; border:solid 1px ghostwhite'>" + tablica[i].login + " - " + tablica[i].password + "</th>"
+    maintainRow += "<tr style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite' ><th style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite'> id :  " + tablica[i].id + "</th><th style='background-color:rgb(36, 36, 37);color:ghostwhite; border:solid 1px ghostwhite'> user:  " + tablica[i].login + " - " + tablica[i].password + "</th>"
     if (tablica[i].uczen == "on")
         maintainRow += "<th style='background-color:rgb(36, 36, 37);color:ghostwhite; border:solid 1px ghostwhite'>Uczeń : <input type='checkbox' checked disabled></th>"
     else
@@ -126,8 +131,15 @@ function arrayRowMaker(tablica, i) {
 // funckja for gender
 function genderArrayRowMaker(tablica, i) {
     let maintainRow = ''
-    maintainRow += "<tr style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite' ><th style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite'>" + tablica[i].id + "</th>"
+    maintainRow += "<tr style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite' ><th style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite'> id: " + tablica[i].id + "</th>"
     maintainRow += "<th style='background-color:rgb(36, 36, 37);color:ghostwhite; border:solid 1px ghostwhite'> płeć: " + tablica[i].plec + "</th></tr>"
+    return maintainRow
+}
+// funckcja for sortowanie 
+function arrayRowMakerForSort(tablica, i) {
+    let maintainRow = ''
+    maintainRow += "<tr style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite' ><th style='background-color:rgb(36, 36, 37);color:ghostwhite;border:solid 1px ghostwhite'> id :  " + tablica[i].id + "</th><th style='background-color:rgb(36, 36, 37);color:ghostwhite; border:solid 1px ghostwhite'> user:  " + tablica[i].login + " - " + tablica[i].password + "</th>"
+    maintainRow += "<th style='background-color:rgb(36, 36, 37);color:ghostwhite; border:solid 1px ghostwhite'> Wiek: " + tablica[i].ageSelect + "</th></tr>"
     return maintainRow
 }
 // obsługa show
@@ -137,14 +149,13 @@ app.get('/show', function (req, res) {
             return parseFloat(a.id) - parseFloat(b.id);
         });;
         let tempPage = pageBasic + "<table style='width:80vw;height:60vh ' >"
-        console.log(userDataArray)
         for (i = 0; i < userDataArray.length; i++) { // tworzę stringa z tabelą
             tempPage += arrayRowMaker(userDataArray, i)
         }
         tempPage += "</table></body>"
         res.send(tempPage)
     } else
-        res.sendFile(path.join(__dirname + "/static/pages/errorPage.html"))
+        res.sendFile(path.join(__dirname + "/static/pages/adminPage.html"))
 })
 //obsługa gender
 app.get('/gender', function (req, res) {
@@ -160,18 +171,17 @@ app.get('/gender', function (req, res) {
         tempPage += "</table>" + manTable + "</table></body>"
         res.send(tempPage)
     } else
-        res.sendFile(path.join(__dirname + "/static/pages/errorPage.html"))
+        res.sendFile(path.join(__dirname + "/static/pages/adminPage.html"))
 })
-//pbsługa sort jako strony i formularza 
+
+//obsługa sort jako strony i formularza 
 app.get('/sort', function (req, res) {
     if (logged) {
         let mustliUserDate = userDataArray;
-        console.log(userDataArray)
         mustliUserDate = mustliUserDate.sort(function (a, b) {
             return parseFloat(a.ageSelect) - parseFloat(b.ageSelect);
         });;
         let tempPage = pageBasic
-        console.log(sortigPossibility + "z tym do ifa")
         if (sortigPossibility)
             tempPage += "<form  onchange='this.submit()'  method='POST' action='/sort'><input checked type='radio' name='type' id='r1'value='up' ><label style='color:white'for='#r1'>Rosnąco</label> <input type='radio' name='type' id='r2'value='dwn'><label style='color:white' for='#r2'>Malejąco</label></form><table style='margin:0 auto;width:80vw;height:30vh ' >"
         else {
@@ -179,18 +189,16 @@ app.get('/sort', function (req, res) {
             mustliUserDate.reverse()
         }
         let manTable = "<table style='margin:0 auto;width:80vw;height:30vh;margin-top:10px;' >"
-
         for (i = 0; i < userDataArray.length; i++) { // tworzę stringa z tabelą
             if (sortigPossibility)
-                manTable += arrayRowMaker(mustliUserDate, i)
+                manTable += arrayRowMakerForSort(mustliUserDate, i)
             else
-                tempPage += arrayRowMaker(mustliUserDate, i)
+                tempPage += arrayRowMakerForSort(mustliUserDate, i)
         }
-
         tempPage += "</table>" + manTable + "</table></body>"
         res.send(tempPage)
     } else
-        res.sendFile(path.join(__dirname + "/static/pages/errorPage.html"))
+        res.sendFile(path.join(__dirname + "/static/pages/adminPage.html"))
 })
 app.post('/sort', function (req, res) {
     if (req.body.type == 'dwn')
@@ -205,5 +213,5 @@ app.get('*', function (req, res) {
 });
 //nasłuch na określonym porcie
 app.listen(PORT, function () {
-    console.log("Serwer startuje na " + PORT)
+    console.log("Start Serwera na porcie " + PORT)
 })

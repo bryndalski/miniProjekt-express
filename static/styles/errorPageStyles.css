@@ -1,44 +1,46 @@
-body{
+body {
     padding: 0;
     margin: 0;
-    overflow: hidden;
+    overflow: scroll;
+    background-color: rgb(255, 97, 97);
+
 }
-.MainNav{
+
+.MainNav {
     background-color: rgb(78, 78, 194);
     display: flex;
     flex-direction: row;
-    height:60px;
+    height: 60px;
 }
 
-.MainNav a{
+.MainNav a {
     color: white;
     text-decoration: none;
-    line-height:60px;
+    line-height: 60px;
     font-size: large;
     text-decoration: underline;
     font-family: 'Roboto', sans-serif;
 }
+
 .MainNav a:hover,
-.MainNav a:active{
+.MainNav a:active {
     color: rgb(218, 36, 202);
 }
 
-.MainNav li{
- 
+.MainNav li {
+
     text-decoration: none;
     display: flex;
-    margin-left:50px;
+    margin-left: 50px;
 }
-h1{
-    width:100vw;
-    height:100vh;
-    line-height:calc( 100% - 60px);
-    font-size: 200pt;
+
+h1 {
+    width: 100vw;
+    height: 100vh;
+    font-size: 100pt;
     font-family: 'Roboto', sans-serif;
-    font-weight:bolder;
+    font-weight: bolder;
     color: rgb(191, 191, 212);
     text-align: center;
     margin: 0;
-    background-color: rgb(255, 97, 97);
 }
-
